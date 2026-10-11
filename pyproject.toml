@@ -1,0 +1,21 @@
+[project]
+name = "ace-suno"
+version = "0.1.0"
+description = "Suno music generation, task lookup, and audio preview through Ace Data Cloud"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = ["requests>=2.31,<3"]
+classifiers = ["Operating System :: OS Independent"]
+
+[project.urls]
+Repository = "https://github.com/AceDataCloud/SunoComfyUI"
+Documentation = "https://github.com/AceDataCloud/SunoComfyUI#readme"
+"Bug Tracker" = "https://github.com/AceDataCloud/SunoComfyUI/issues"
+
+[tool.comfy]
+PublisherId = "acedatacloud"
+DisplayName = "Suno by Ace Data Cloud"
+Icon = "https://raw.githubusercontent.com/AceDataCloud/SunoComfyUI/main/assets/logo-400.png"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

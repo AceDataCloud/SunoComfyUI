@@ -1,0 +1,70 @@
+# Ace Data Cloud 的 ComfyUI Suno 节点
+
+通过 Ace Data Cloud 账户生成 Suno 音乐，按**同一个任务 ID**查询结果，并在 ComfyUI 预览或保存音频。节点调用云 API，无需本地模型或显卡。API 消耗以[当前 Suno 价格](https://platform.acedata.cloud/models)和账户 Credits 为准，与 ComfyUI Credits 分开。
+
+[English guide](../README.md)
+
+三个节点分别是 **Suno Submit Music**（收费生成一次并显示任务 ID）、**Suno Retrieve Task**（只查询已有任务）、**Suno Load Audio**（将完成的媒体链接解码成 ComfyUI `AUDIO`）。初版工作流使用返回的第一首音频；高级 Suno 操作及其他曲目暂未包含。
+
+## 1. 安装
+
+使用 [ComfyUI 当前稳定版](https://github.com/comfyanonymous/ComfyUI/releases)和 ComfyUI-Manager。Registry 正式上架后，在 **Manager → Custom Nodes** 搜索 **Suno**，确认发布者是 **acedatacloud**、包名是 **Suno by Ace Data Cloud**，安装并重启。Registry 包 ID 是 `ace-suno`，源码仓库是 `AceDataCloud/SunoComfyUI`。
+
+正式上架前，本地源码测试可运行：
+
+```bash
+cd /path/to/ComfyUI/custom_nodes
+git clone https://github.com/AceDataCloud/SunoComfyUI.git
+cd SunoComfyUI
+python -m pip install -r requirements.txt
+```
+
+重启后在节点搜索中输入 **Suno**，确认三个 Ace 节点都能加载。源码可下载并不代表 Registry 或 Manager 已可发现，需要分别核验。
+
+![本地 ComfyUI 节点列表中搜索 Suno](images/00-local-node-search.png)
+
+## 2. 配置有 Suno 权限的 Key
+
+1. 登录 [Ace Data Cloud 控制台](https://platform.acedata.cloud/console/applications)，打开已开通 Suno 的应用。使用已有 Key，或创建专用 Key。设置 API 路径限制时，同时允许 `/suno/audios` 和 `/suno/tasks`。
+2. 生成前查看当前价格及 Credits 余额。短提示词不一定降低单次生成费用。
+3. 在 **ComfyUI 进程环境**中配置 Key，然后重启。终端安装示例：
+
+```bash
+export ACEDATACLOUD_API_KEY='在此填写私有 Key'
+python main.py --cpu
+```
+
+Key 只放在私有 shell 或进程管理器中，不写入工作流 JSON、仓库、截图或 Issue。已有环境也支持 `ACEDATACLOUD_API_TOKEN`。ComfyUI Desktop 需要在启动 Desktop 进程前配置环境；其他终端的 `export` 不会自动传过去。
+
+## 3. 提交一次生成
+
+下载 [01-submit-suno.json](../examples/01-submit-suno.json)，拖入 ComfyUI 画布或通过 **File → Open** 打开。示例把 **Suno Submit Music** 接到内置 **Preview as Text**，以便在画布看到任务 ID。提示词为 `A gentle instrumental piano melody for a sunrise.`，模型为 `chirp-v6`，**Instrumental** 开启。更换模型前先查价格和可用性。
+
+只点击一次 **Run**，从 **Preview as Text** 复制 **Suno task ID**。异步请求被接受不代表歌曲已完成。若提交超时或没有任务 ID，先查 Ace 请求记录；插件不会自动重试收费生成。
+
+![ComfyUI 0.39.0 中导入的提交工作流](images/01-submit-local.png)
+
+## 4. 查询同一任务并预览
+
+下载 [02-retrieve-and-preview.json](../examples/02-retrieve-and-preview.json) 并导入。把 `PASTE_YOUR_TASK_ID_HERE` 改为上一步的任务 ID。工作流为 **Suno Retrieve Task → Suno Load Audio → Preview Audio**，状态输出另接内置 **Preview as Text**。
+
+点击 **Run**。查询节点最多等待 240 秒，每五秒查询**同一个 ID**。任务成功后，下载节点把媒体链接解码为 ComfyUI `AUDIO`，可在 Preview Audio 播放。需要本地文件时换接 **Save Audio**。
+
+超过 240 秒仍是 pending 时，Load Audio 会提示任务未完成。只重新运行这个**查询工作流**，继续用同一个 ID；不要重新运行提交工作流。ComfyUI 队列完成也不能代替服务终态和可播放音频。
+
+![ComfyUI 中任务成功且音频可播放](images/02-new-song-succeeded.png)
+
+## 5. 账单与排障
+
+在 [Ace Data Cloud 控制台](https://platform.acedata.cloud/console/applications)按任务或 Trace ID 检查请求记录及 Credits 扣费。任务查询不应产生新的音乐生成。
+
+| 现象 | 处理 |
+| --- | --- |
+| 找不到 Key | 在实际 ComfyUI 进程配置 `ACEDATACLOUD_API_KEY`，然后重启。 |
+| HTTP 401/403 | 检查 Key、Suno 开通、路径权限和内容限制。 |
+| HTTP 429 | 等待限额恢复；若已有任务 ID，继续查同一个任务。 |
+| pending | 使用同一个任务 ID 重跑查询工作流。 |
+| 提交 HTTP 5xx/超时 | 先查 Ace 请求记录，确认是否已经受理。 |
+| 音频下载失败 | 确认任务成功且媒体链接有效；重新查任务，不要重新生成。 |
+
+插件把提示词发往 `api.acedata.cloud`，从 Ace CDN 下载完成的音频。Key 只从本机进程环境读取，不保存在工作流中。只提交有权处理的内容。详见[隐私说明](PRIVACY.md)。

@@ -1,0 +1,57 @@
+{
+  "tested_at": "2026-10-11",
+  "host": {
+    "name": "ComfyUI",
+    "version": "0.39.0",
+    "mode": "isolated CPU process and user directory",
+    "python": "3.11.17",
+    "install": "local source checkout; not a Registry or Manager installation"
+  },
+  "local_node_search": {
+    "query": "Suno",
+    "found": [
+      "Suno Submit Music (Ace Data Cloud)",
+      "Suno Retrieve Task (Ace Data Cloud)",
+      "Suno Load Audio (Ace Data Cloud)"
+    ],
+    "screenshot": "docs/images/00-local-node-search.png"
+  },
+  "workflows_imported": [
+    "examples/01-submit-suno.json",
+    "examples/02-retrieve-and-preview.json"
+  ],
+  "live_generation": {
+    "paid_submissions": 1,
+    "model": "chirp-v6",
+    "task_id": "51332661-c7a0-4101-9ac3-46aefc55b4d3",
+    "trace_id": "1016ec8c-667b-4711-8242-f12b5b3bf6a3",
+    "comfy_submit_job_id": "9422e1b7-01be-4ab2-b9e3-ee0c7429957a",
+    "comfy_retrieve_job_id": "99661a97-fcc3-4008-84ca-abbbb8503b6f",
+    "task_status": "succeeded",
+    "comfy_retrieve_status": "success",
+    "audio_preview": {
+      "playable": true,
+      "duration_seconds": 193.5,
+      "sample_rate": 48000,
+      "channels": 2,
+      "output_format": "FLAC",
+      "sha256": "405e541f909a05c50579cc4d04b7f202f44b4dec92e55f22275bee03936a94cb"
+    },
+    "screenshot": "docs/images/02-new-song-succeeded.png"
+  },
+  "billing_readback": {
+    "usage_id": "cbc3ee86-f0d2-40c3-a83f-db284a93732a",
+    "trace_id_matches_task": true,
+    "matching_usage_rows": 1,
+    "http_status": 200,
+    "original_credits": 0.56,
+    "deducted_credits": 0.504,
+    "created_at": "2026-10-11T14:33:24.573498Z"
+  },
+  "publication": {
+    "registry_search": "not listed at test time",
+    "manager_market_install": "not tested",
+    "default_included": false,
+    "featured": false
+  }
+}
