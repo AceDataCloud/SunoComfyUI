@@ -1,5 +1,5 @@
 [project]
-name = "ace-suno"
+name = "suno"
 version = "0.1.0"
 description = "Suno music generation, task lookup, and audio preview through Ace Data Cloud"
 license = { file = "LICENSE" }
