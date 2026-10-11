@@ -9,12 +9,14 @@ Generate Suno music with your Ace Data Cloud account, retrieve the **same task I
 | **Suno Submit Music (Ace Data Cloud)** | Submit one music generation and display its task ID | Paid generation |
 | **Suno Retrieve Task (Ace Data Cloud)** | Query or wait for an existing task ID | Query only |
 | **Suno Load Audio (Ace Data Cloud)** | Decode the completed media link into ComfyUI `AUDIO` | Media download only |
+| **Suno Generate Lyrics (Ace Data Cloud)** | Submit a lyrics request with `default` or `remi-v1` | Check current lyrics price |
+| **Suno Retrieve Lyrics (Ace Data Cloud)** | Read an existing lyrics task ID | Query only |
 
-The `AUDIO` output connects to ComfyUI's **Preview Audio** and **Save Audio** nodes. The starter workflow uses the first track if a task returns multiple tracks. Advanced Suno actions and additional tracks are outside this initial package.
+The `AUDIO` output connects to ComfyUI's **Preview Audio** and **Save Audio** nodes. The starter workflow uses the first track if a task returns multiple tracks. The music node offers all ten music model IDs in the current [Suno Dify plugin](https://github.com/AceDataCloud/SunoDify); the lyrics node offers its other two model IDs. Model availability and price can vary. Advanced Suno actions and additional tracks still need separate node work.
 
 ## 1. Install
 
-Use [ComfyUI's current stable release](https://github.com/comfyanonymous/ComfyUI/releases) with ComfyUI-Manager. When the Registry entry is live, open **Manager → Custom Nodes**, search **Suno**, confirm publisher **acedatacloud** and package **Suno by Ace Data Cloud**, then install and restart. The Registry ID is `ace-suno`; the source repository is `AceDataCloud/SunoComfyUI`.
+Use [ComfyUI's current stable release](https://github.com/comfyanonymous/ComfyUI/releases) with ComfyUI-Manager. When the Registry entry is live, open **Manager → Custom Nodes**, search **Suno**, confirm publisher **acedatacloud** and package **Suno by Ace Data Cloud**, then install and restart. The new Registry ID is `suno`; the earlier `ace-suno` entry remains a separate listing until its migration is verified. The source repository is `AceDataCloud/SunoComfyUI`.
 
 For local source testing before Registry publication:
 
@@ -25,14 +27,14 @@ cd SunoComfyUI
 python -m pip install -r requirements.txt
 ```
 
-Restart ComfyUI and search the node picker for **Suno**. Confirm all three Ace nodes load without errors. Source availability alone does not prove Registry or Manager discovery.
+Restart ComfyUI and search the node picker for **Suno**. Confirm all five Ace nodes load without errors. Source availability alone does not prove Registry or Manager discovery.
 
 ![Suno nodes found in the local ComfyUI node picker](docs/images/00-local-node-search.png)
 
 ## 2. Get a key with Suno access
 
 1. Sign in to [Ace Data Cloud Console](https://platform.acedata.cloud/console/applications).
-2. Open an application with Suno access. Use its existing key or create a dedicated key. If you restrict API paths, allow both `/suno/audios` and `/suno/tasks`.
+2. Open an application with Suno access. Use its existing key or create a dedicated key. If you restrict API paths, allow `/suno/audios`, `/suno/lyrics`, and `/suno/tasks`.
 3. Check the Suno service's current price and your available Credits before generating. A short prompt does not necessarily reduce the per-generation charge.
 4. Set the key in the **ComfyUI process environment**, then restart. For a terminal installation:
 
@@ -51,6 +53,8 @@ Download [01-submit-suno.json](examples/01-submit-suno.json) and drag it onto th
 - Model: `chirp-v6` (change it only after checking price and availability).
 - Instrumental: enabled.
 
+Music models: `chirp-v6`, `chirp-v6-wild`, `chirp-v6-mini`, `chirp-v5-5`, `chirp-v5`, `chirp-v4-5-plus`, `chirp-v4-5`, `chirp-v4`, `chirp-v3-5`, and `chirp-v3-0`. Check current availability and pricing before choosing a legacy model.
+
 ![Imported submit workflow in ComfyUI 0.39.0](docs/images/01-submit-local.png)
 
 Click **Run** once. **Preview as Text** displays the **Suno task ID**. Copy it. An accepted async submission is **not** a completed song. If submission times out or yields no task ID, inspect Ace request history before trying again. The plugin never retries a paid submission automatically.
@@ -65,7 +69,11 @@ If the task is still pending after 240 seconds, Load Audio shows a pending error
 
 ![A completed Suno task with succeeded status and playable audio in ComfyUI](docs/images/02-new-song-succeeded.png)
 
-## 5. Check usage and troubleshoot
+## 5. Generate lyrics
+
+Import [03-submit-lyrics.json](examples/03-submit-lyrics.json), choose `default` or `remi-v1`, and run once. The node returns lyrics JSON immediately or a task ID. If it returns a task ID, import [04-retrieve-lyrics.json](examples/04-retrieve-lyrics.json), paste that same ID, and query until `succeeded`. The lyrics node does not rerun automatically after a timeout.
+
+## 6. Check usage and troubleshoot
 
 In [Ace Data Cloud Console](https://platform.acedata.cloud/console/applications), find the submission by task or trace ID and check its Credits deduction. Read-only task queries should not create another music generation.
 
@@ -89,4 +97,4 @@ python -m unittest discover -s tests -v
 python -m py_compile __init__.py client.py nodes.py
 ```
 
-For Registry publishing, `pyproject.toml` uses ID `ace-suno` and publisher `acedatacloud`. Its 400×400 icon is a proportional resize of the [canonical Ace logo](https://cdn.acedata.cloud/assets/logo.png) to meet the Registry size limit.
+For Registry publishing, `pyproject.toml` uses the short ID `suno` and publisher `acedatacloud`. Its 400×400 icon is a proportional resize of the [canonical Ace logo](https://cdn.acedata.cloud/assets/logo.png) to meet the Registry size limit.

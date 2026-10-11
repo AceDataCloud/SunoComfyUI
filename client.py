@@ -15,6 +15,11 @@ AUDIO_HOSTS = {"cdn.acedata.cloud", "cdn.acedata2.cloud"}
 COMPLETE = {"complete", "completed", "succeed", "succeeded", "success", "finished"}
 FAILED = {"failed", "error", "cancelled", "canceled", "rejected"}
 MAX_AUDIO_BYTES = 64 * 1024 * 1024
+AUDIO_MODELS = (
+    "chirp-v6", "chirp-v6-wild", "chirp-v6-mini", "chirp-v5-5", "chirp-v5",
+    "chirp-v4-5-plus", "chirp-v4-5", "chirp-v4", "chirp-v3-5", "chirp-v3-0",
+)
+LYRICS_MODELS = ("default", "remi-v1")
 
 
 class SunoError(RuntimeError):
@@ -74,7 +79,7 @@ def _post(path: str, payload: dict[str, Any], *, read_only: bool = False) -> dic
 def submit(prompt: str, model: str, instrumental: bool) -> tuple[str, str]:
     if not isinstance(prompt, str) or not prompt.strip() or len(prompt) > 500:
         raise ValueError("Prompt must contain 1 to 500 characters.")
-    if model not in {"chirp-v6", "chirp-v6-mini", "chirp-v6-wild"}:
+    if model not in AUDIO_MODELS:
         raise ValueError("Unsupported Suno model.")
     body = _post(
         "/suno/audios",
@@ -89,6 +94,77 @@ def submit(prompt: str, model: str, instrumental: bool) -> tuple[str, str]:
     if not isinstance(task_id, str) or not task_id:
         raise SunoError("No task ID was returned. Inspect request history before resubmitting.")
     return task_id, str(body.get("trace_id") or "")
+
+
+def _public_lyrics(value: Any) -> Any:
+    """Keep customer-facing lyric fields while excluding internal task data."""
+    if isinstance(value, str):
+        try:
+            value = json.loads(value)
+        except ValueError:
+            return value
+    if isinstance(value, list):
+        return [_public_lyrics(item) for item in value]
+    if isinstance(value, dict):
+        allowed = {"title", "lyric", "lyrics", "text", "status", "state", "data", "response", "content", "result"}
+        return {key: _public_lyrics(item) for key, item in value.items() if key in allowed}
+    return value if isinstance(value, (int, float, bool)) else None
+
+
+def _has_lyric_text(value: Any) -> bool:
+    if isinstance(value, str):
+        return bool(value.strip())
+    if isinstance(value, list):
+        return any(_has_lyric_text(item) for item in value)
+    if isinstance(value, dict):
+        return any(_has_lyric_text(value[key]) for key in ("lyric", "lyrics", "text") if key in value) or any(
+            _has_lyric_text(value[key]) for key in ("data", "response", "content", "result") if key in value
+        )
+    return False
+
+
+def generate_lyrics(prompt: str, model: str) -> tuple[str, str, str, str]:
+    if not isinstance(prompt, str) or not prompt.strip():
+        raise ValueError("A lyrics prompt is required.")
+    if model not in LYRICS_MODELS:
+        raise ValueError("Unsupported Suno lyrics model.")
+    body = _post("/suno/lyrics", {"prompt": prompt.strip(), "model": model})
+    if body.get("success") is False or body.get("error"):
+        raise SunoError("Suno rejected the lyrics request. Inspect request history before resubmitting.")
+    task_id = body.get("task_id") or (body.get("task", {}).get("id") if isinstance(body.get("task"), dict) else "")
+    trace_id = str(body.get("trace_id") or "")
+    if task_id:
+        return "pending", str(task_id), "", trace_id
+    lyrics = _public_lyrics(body.get("data") or body.get("response") or body.get("result"))
+    if not _has_lyric_text(lyrics):
+        raise SunoError("No task ID or lyrics were returned. Inspect request history before resubmitting.")
+    return "succeeded", "", json.dumps(lyrics, ensure_ascii=False), trace_id
+
+
+def retrieve_lyrics_once(task_id: str) -> tuple[str, str, str, str]:
+    if not isinstance(task_id, str) or not task_id.strip():
+        raise ValueError("The Suno lyrics task ID is required.")
+    task_id = task_id.strip()
+    body = _post("/suno/tasks", {"action": "retrieve", "id": task_id}, read_only=True)
+    if body.get("success") is False or body.get("error"):
+        raise SunoError("Suno lyrics task lookup failed. Check the task ID and service access.")
+    result = body.get("response", body)
+    if isinstance(result, str):
+        try:
+            result = json.loads(result)
+        except ValueError:
+            result = {}
+    if _state(result) == "failed":
+        raise SunoError("Suno lyrics task failed. Inspect the task and trace ID in Ace Data Cloud.")
+    trace_id = str(body.get("trace_id") or "")
+    if "finished_at" in body and body["finished_at"] is None:
+        return "pending", task_id, "", trace_id
+    lyrics = _public_lyrics(result)
+    if body.get("finished_at") or _state(result) == "succeeded":
+        if not _has_lyric_text(lyrics):
+            raise SunoError("Suno lyrics task finished without lyrics.")
+        return "succeeded", task_id, json.dumps(lyrics, ensure_ascii=False), trace_id
+    return "pending", task_id, "", trace_id
 
 
 def _audio_urls(value: Any) -> list[str]:

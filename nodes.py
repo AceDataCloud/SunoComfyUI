@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from io import BytesIO
 
-from .client import SunoError, download_audio, retrieve, submit
+from .client import (AUDIO_MODELS, LYRICS_MODELS, SunoError, download_audio,
+                     generate_lyrics, retrieve, retrieve_lyrics_once, submit)
 
 
 class AceSunoGenerate:
@@ -12,7 +13,7 @@ class AceSunoGenerate:
     def INPUT_TYPES(cls):
         return {"required": {
             "prompt": ("STRING", {"multiline": True, "default": "A gentle instrumental piano melody for a sunrise."}),
-            "model": (["chirp-v6", "chirp-v6-mini", "chirp-v6-wild"],),
+            "model": (list(AUDIO_MODELS), {"default": "chirp-v6"}),
             "instrumental": ("BOOLEAN", {"default": True}),
         }}
 
@@ -49,6 +50,45 @@ class AceSunoRetrieve:
         return {"ui": {"text": [f"Suno status: {status}", f"Task ID: {task_id}",
                                 "Audio is ready" if audio_url else "Query this task ID again later"]},
                 "result": (status, task_id, audio_url, trace_id)}
+
+
+class AceSunoGenerateLyrics:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {
+            "prompt": ("STRING", {"multiline": True, "default": "A hopeful song about finding a new home."}),
+            "model": (list(LYRICS_MODELS), {"default": "default"}),
+        }}
+
+    RETURN_TYPES = ("STRING", "STRING", "STRING", "STRING")
+    RETURN_NAMES = ("status", "task_id", "lyrics_json", "trace_id")
+    FUNCTION = "run"
+    CATEGORY = "Ace Data Cloud/Suno"
+    DESCRIPTION = "Submit one Suno lyrics request. If a task ID is returned, use Retrieve Lyrics."
+    OUTPUT_NODE = True
+
+    def run(self, prompt: str, model: str):
+        status, task_id, lyrics_json, trace_id = generate_lyrics(prompt, model)
+        return {"ui": {"text": [f"Suno lyrics status: {status}", f"Task ID: {task_id or 'completed synchronously'}"]},
+                "result": (status, task_id, lyrics_json, trace_id)}
+
+
+class AceSunoRetrieveLyrics:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"task_id": ("STRING", {"default": ""})}}
+
+    RETURN_TYPES = ("STRING", "STRING", "STRING", "STRING")
+    RETURN_NAMES = ("status", "task_id", "lyrics_json", "trace_id")
+    FUNCTION = "run"
+    CATEGORY = "Ace Data Cloud/Suno"
+    DESCRIPTION = "Read an existing lyrics task without submitting another paid request."
+    OUTPUT_NODE = True
+
+    def run(self, task_id: str):
+        status, task_id, lyrics_json, trace_id = retrieve_lyrics_once(task_id)
+        return {"ui": {"text": [f"Suno lyrics status: {status}", f"Task ID: {task_id}"]},
+                "result": (status, task_id, lyrics_json, trace_id)}
 
 
 class AceSunoAudio:
