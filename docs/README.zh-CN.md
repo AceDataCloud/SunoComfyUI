@@ -8,7 +8,7 @@
 
 ## 1. 安装
 
-使用 [ComfyUI 当前稳定版](https://github.com/comfyanonymous/ComfyUI/releases)和 ComfyUI-Manager。Registry 正式上架后，在 **Manager → Custom Nodes** 搜索 **Suno**，确认发布者是 **acedatacloud**、包名是 **Suno by Ace Data Cloud**，安装并重启。新的 Registry ID 为 `suno`；原 `ace-suno` 是另一条旧版 listing，迁移验收前不会将其视为新短名已上线。源码仓库是 `AceDataCloud/SunoComfyUI`。
+使用 [ComfyUI 当前稳定版](https://github.com/comfyanonymous/ComfyUI/releases)和 ComfyUI-Manager。Registry 版本激活后，在 **Manager → Custom Nodes** 搜索 **Suno**，确认发布者是 **acedatacloud**、包名是 **Suno by Ace Data Cloud**，安装并重启。Registry 包 ID 是 `ace-suno`，源码仓库是 `AceDataCloud/SunoComfyUI`。
 
 正式上架前，本地源码测试可运行：
 

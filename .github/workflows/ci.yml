@@ -24,7 +24,7 @@ jobs:
           from pathlib import Path
 
           metadata = tomllib.loads(Path('pyproject.toml').read_text())
-          assert metadata['project']['name'] == 'suno'
+          assert metadata['project']['name'] == 'ace-suno'
           assert metadata['tool']['comfy']['PublisherId'] == 'acedatacloud'
           for path in Path('examples').glob('*.json'):
               workflow = json.loads(path.read_text())
