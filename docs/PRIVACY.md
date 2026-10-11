@@ -2,6 +2,7 @@
 
 - `Suno Submit Music` sends the prompt, selected model, instrumental flag, and environment key to `https://api.acedata.cloud/suno/audios`.
 - `Suno Generate Lyrics` sends the prompt, selected lyrics model, and environment key to `https://api.acedata.cloud/suno/lyrics`.
+- Advanced Dify tool nodes send their selected API parameters and environment key to the matching `https://api.acedata.cloud/suno/*` endpoint. Delete/archive operations require explicit confirmation in the node inputs.
 - `Suno Retrieve Task` sends the task ID and key to `https://api.acedata.cloud/suno/tasks`.
 - `Suno Load Audio` downloads a completed HTTPS media URL from `cdn.acedata.cloud` or `cdn.acedata2.cloud`. It refuses redirects and other hosts.
 - The package does not write keys or prompts to local files or add telemetry. ComfyUI's own workflow and execution history may retain non-secret inputs such as prompts and task IDs.

@@ -53,5 +53,18 @@
     "manager_market_install": "not tested",
     "default_included": false,
     "featured": false
+  },
+  "dify_parity_followup": {
+    "tested_at": "2026-10-12",
+    "isolated_comfy_version": "0.39.0",
+    "registered_node_count": 24,
+    "dify_tool_node_count": 19,
+    "distinct_dify_model_choices": 12,
+    "read_only_existing_task_id": "51332661-c7a0-4101-9ac3-46aefc55b4d3",
+    "batch_retrieve_comfy_prompt_id": "5c38c0e2-47cd-4f52-b999-069d90faafc8",
+    "batch_retrieve_comfy_status": "success",
+    "batch_retrieve_task_status": "succeeded",
+    "returned_media_url_count": 2,
+    "new_paid_advanced_action_tested": false
   }
 }

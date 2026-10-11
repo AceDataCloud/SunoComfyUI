@@ -2,6 +2,8 @@
 
 from .nodes import (AceSunoAudio, AceSunoGenerate, AceSunoGenerateLyrics,
                     AceSunoRetrieve, AceSunoRetrieveLyrics)
+from .parity_nodes import (NODE_CLASS_MAPPINGS as DIFY_NODE_CLASS_MAPPINGS,
+                           NODE_DISPLAY_NAME_MAPPINGS as DIFY_NODE_DISPLAY_NAME_MAPPINGS)
 
 NODE_CLASS_MAPPINGS = {
     "AceSunoGenerate": AceSunoGenerate,
@@ -18,5 +20,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "AceSunoGenerateLyrics": "Suno Generate Lyrics (Ace Data Cloud)",
     "AceSunoRetrieveLyrics": "Suno Retrieve Lyrics (Ace Data Cloud)",
 }
+
+NODE_CLASS_MAPPINGS.update(DIFY_NODE_CLASS_MAPPINGS)
+NODE_DISPLAY_NAME_MAPPINGS.update(DIFY_NODE_DISPLAY_NAME_MAPPINGS)
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
