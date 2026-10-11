@@ -12,7 +12,7 @@ Generate Suno music with your Ace Data Cloud account, retrieve the **same task I
 | **Suno Generate Lyrics (Ace Data Cloud)** | Submit a lyrics request with `default` or `remi-v1` | Check current lyrics price |
 | **Suno Retrieve Lyrics (Ace Data Cloud)** | Read an existing lyrics task ID | Query only |
 
-The `AUDIO` output connects to ComfyUI's **Preview Audio** and **Save Audio** nodes. The starter workflow uses the first track if a task returns multiple tracks. The music node offers all ten music model IDs in the current [Suno Dify plugin](https://github.com/AceDataCloud/SunoDify); the lyrics node offers its other two model IDs. Model availability and price can vary. Advanced Suno actions and additional tracks still need separate node work.
+The `AUDIO` output connects to ComfyUI's **Preview Audio** and **Save Audio** nodes. The starter workflow uses the first track if a task returns multiple tracks. The music node offers all ten music model IDs in the current [Suno Dify plugin](https://github.com/AceDataCloud/SunoDify); the lyrics node offers its other two model IDs. Nineteen additional schema-backed nodes expose all Dify tool definitions and their actions. Their `media_urls_json` output preserves every returned media link. Model availability and price can vary.
 
 ## 1. Install
 
@@ -27,7 +27,7 @@ cd SunoComfyUI
 python -m pip install -r requirements.txt
 ```
 
-Restart ComfyUI and search the node picker for **Suno**. Confirm all five Ace nodes load without errors. Source availability alone does not prove Registry or Manager discovery.
+Restart ComfyUI and search the node picker for **Suno**. Confirm the five guided nodes and 19 Dify tool nodes load without errors. Source availability alone does not prove Registry or Manager discovery.
 
 ![Suno nodes found in the local ComfyUI node picker](docs/images/00-local-node-search.png)
 
@@ -73,7 +73,13 @@ If the task is still pending after 240 seconds, Load Audio shows a pending error
 
 Import [03-submit-lyrics.json](examples/03-submit-lyrics.json), choose `default` or `remi-v1`, and run once. The node returns lyrics JSON immediately or a task ID. If it returns a task ID, import [04-retrieve-lyrics.json](examples/04-retrieve-lyrics.json), paste that same ID, and query until `succeeded`. The lyrics node does not rerun automatically after a timeout.
 
-## 6. Check usage and troubleshoot
+## 6. Use the remaining Dify tools
+
+Search **Suno** in the node picker for the 19 additional nodes named after every formal tool in [SunoDify](https://github.com/AceDataCloud/SunoDify), including extend, cover, stems, style, formats, personas, voices, custom models, projects, and batch task lookup. Each exposes the Dify model/action choices and named fields. Leave a field empty to omit it, or supply advanced fields in `parameters_json` as a JSON object. Nonempty named fields override JSON. The copied published Dify API contract validates the payload before the request. Destructive delete/archive actions require `confirm: true` in JSON or the confirmation widget. Paid requests are sent once; only read-only queries may retry after a connection failure.
+
+Use the returned `task_id` with the corresponding task lookup node. The advanced nodes expose `media_urls_json` and `result_json`, so additional tracks and non-audio results remain accessible to downstream string/JSON nodes. The five guided nodes above keep the common music-to-`AUDIO` path simple.
+
+## 7. Check usage and troubleshoot
 
 In [Ace Data Cloud Console](https://platform.acedata.cloud/console/applications), find the submission by task or trace ID and check its Credits deduction. Read-only task queries should not create another music generation.
 
@@ -97,4 +103,4 @@ python -m unittest discover -s tests -v
 python -m py_compile __init__.py client.py nodes.py
 ```
 
-For Registry publishing, `pyproject.toml` uses the existing ID `ace-suno`, version `0.2.0`, and publisher `acedatacloud`. Its 400×400 icon is a proportional resize of the [canonical Ace logo](https://cdn.acedata.cloud/assets/logo.png) to meet the Registry size limit.
+For Registry publishing, `pyproject.toml` uses the existing ID `ace-suno`, version `0.3.0`, and publisher `acedatacloud`. Its 400×400 icon is a proportional resize of the [canonical Ace logo](https://cdn.acedata.cloud/assets/logo.png) to meet the Registry size limit.

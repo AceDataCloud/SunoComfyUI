@@ -4,7 +4,7 @@
 
 [English guide](../README.md)
 
-五个节点包括 **Suno Submit Music**（收费生成一次并显示任务 ID）、**Suno Retrieve Task**（只查询已有任务）、**Suno Load Audio**（解码成 ComfyUI `AUDIO`），以及歌词提交和歌词任务查询。音乐节点覆盖当前 Dify Suno 插件的 10 个音乐 model ID，歌词节点覆盖 `default`、`remi-v1`。初版工作流使用返回的第一首音频；其他高级操作和曲目仍待实现。
+五个引导节点包括 **Suno Submit Music**（收费生成一次并显示任务 ID）、**Suno Retrieve Task**（只查询已有任务）、**Suno Load Audio**（解码成 ComfyUI `AUDIO`），以及歌词提交和歌词任务查询。音乐节点覆盖当前 Dify Suno 插件的 10 个音乐 model ID，歌词节点覆盖 `default`、`remi-v1`。另有 19 个合同驱动节点逐项覆盖 Dify 正式工具定义与 action。引导工作流使用返回的第一首音频；高级节点的 `media_urls_json` 保留全部链接。
 
 ## 1. 安装
 
@@ -19,7 +19,7 @@ cd SunoComfyUI
 python -m pip install -r requirements.txt
 ```
 
-重启后在节点搜索中输入 **Suno**，确认五个 Ace 节点都能加载。源码可下载并不代表 Registry 或 Manager 已可发现，需要分别核验。
+重启后在节点搜索中输入 **Suno**，确认五个引导节点和 19 个 Dify 工具节点都能加载。源码可下载并不代表 Registry 或 Manager 已可发现，需要分别核验。
 
 ![本地 ComfyUI 节点列表中搜索 Suno](images/00-local-node-search.png)
 
@@ -60,7 +60,11 @@ Key 只放在私有 shell 或进程管理器中，不写入工作流 JSON、仓�
 
 导入 [03-submit-lyrics.json](../examples/03-submit-lyrics.json)，选择 `default` 或 `remi-v1`，只提交一次。节点可能直接返回歌词 JSON，也可能返回任务 ID。若得到任务 ID，导入 [04-retrieve-lyrics.json](../examples/04-retrieve-lyrics.json)，填入同一个 ID，只查询到 `succeeded`。提交超时后先查请求记录，不自动重试收费操作。
 
-## 6. 账单与排障
+## 6. 使用其余 Dify 工具
+
+在节点搜索中输入 **Suno**，可找到扩展、翻唱、分轨、风格优化、格式转换、Persona、Voice、自定义模型、项目和批量查询等 19 个工具节点。固定 model/action 可直接选择；其他参数有具名输入框，也可放进 `parameters_json` JSON 对象。具名非空字段覆盖 JSON。原 Dify 发布合同会在请求前校验。删除/归档需在 JSON 设置 `confirm: true` 或打开确认控件；收费请求不自动重试。输出的 `task_id` 用于同 ID 查询，`media_urls_json` 保留全部媒体链接。
+
+## 7. 账单与排障
 
 在 [Ace Data Cloud 控制台](https://platform.acedata.cloud/console/applications)按任务或 Trace ID 检查请求记录及 Credits 扣费。任务查询不应产生新的音乐生成。
 
