@@ -16,7 +16,7 @@ The `AUDIO` output connects to ComfyUI's **Preview Audio** and **Save Audio** no
 
 ## 1. Install
 
-Use [ComfyUI's current stable release](https://github.com/comfyanonymous/ComfyUI/releases) with ComfyUI-Manager. When the Registry entry is live, open **Manager → Custom Nodes**, search **Suno**, confirm publisher **acedatacloud** and package **Suno by Ace Data Cloud**, then install and restart. The new Registry ID is `suno`; the earlier `ace-suno` entry remains a separate listing until its migration is verified. The source repository is `AceDataCloud/SunoComfyUI`.
+Use [ComfyUI's current stable release](https://github.com/comfyanonymous/ComfyUI/releases) with ComfyUI-Manager. When the Registry version is active, open **Manager → Custom Nodes**, search **Suno**, confirm publisher **acedatacloud** and package **Suno by Ace Data Cloud**, then install and restart. The Registry ID is `ace-suno`; the source repository is `AceDataCloud/SunoComfyUI`.
 
 For local source testing before Registry publication:
 
@@ -97,4 +97,4 @@ python -m unittest discover -s tests -v
 python -m py_compile __init__.py client.py nodes.py
 ```
 
-For Registry publishing, `pyproject.toml` uses the short ID `suno` and publisher `acedatacloud`. Its 400×400 icon is a proportional resize of the [canonical Ace logo](https://cdn.acedata.cloud/assets/logo.png) to meet the Registry size limit.
+For Registry publishing, `pyproject.toml` uses the existing ID `ace-suno`, version `0.2.0`, and publisher `acedatacloud`. Its 400×400 icon is a proportional resize of the [canonical Ace logo](https://cdn.acedata.cloud/assets/logo.png) to meet the Registry size limit.
