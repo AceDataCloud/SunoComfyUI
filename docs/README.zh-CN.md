@@ -1,16 +1,24 @@
 # Ace Data Cloud 的 ComfyUI Suno 节点
 
-通过 Ace Data Cloud 账户生成 Suno 音乐，按**同一个任务 ID**查询结果，并在 ComfyUI 预览或保存音频。节点调用云 API，无需本地模型或显卡。API 消耗以[当前 Suno 价格](https://platform.acedata.cloud/models)和账户 Credits 为准，与 ComfyUI Credits 分开。
+通过 Ace Data Cloud 账户生成 Suno 音乐，按**同一个任务 ID**查询结果，并在 ComfyUI 预览或保存音频。节点调用云 API，无需本地模型或显卡。API 消耗以[当前 Suno 价格](https://platform.acedata.cloud/models?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=sunocomfyui_readme_zh_cn_pricing)和账户 Credits 为准，与 ComfyUI Credits 分开。
 
 [English guide](../README.md)
+
+## 获取 API Key
+
+1. 登录 [Ace Data Cloud → 应用](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=sunocomfyui_readme_zh_cn_api_key)。新账户没有通用应用时，先选择**初始化通用应用**。
+2. 打开**通用应用**，确认已开通本节点使用的服务。单服务应用的 Key 只限该服务。可复制已有 API Key；需要独立 Key 时，选择**管理 Key → 创建**，命名为 `ComfyUI`。
+3. 只复制 Token 字符串，不加 `Bearer ` 或引号。平台管理 Token 不能代替节点调用 API 的 Key。若启用**允许的 API**限制，需同时包含工作流用到的提交和任务查询路径；收费动作前核对当前价格与 Credits 余额。
 
 五个引导节点包括 **Suno Submit Music**（收费生成一次并显示任务 ID）、**Suno Retrieve Task**（只查询已有任务）、**Suno Load Audio**（解码成 ComfyUI `AUDIO`），以及歌词提交和歌词任务查询。音乐节点覆盖当前 Dify Suno 插件的 10 个音乐 model ID，歌词节点覆盖 `default`、`remi-v1`。另有 19 个合同驱动节点逐项覆盖 Dify 正式工具定义与 action。引导工作流使用返回的第一首音频；高级节点的 `media_urls_json` 保留全部链接。
 
 ## 1. 安装
 
-使用 [ComfyUI 当前稳定版](https://github.com/comfyanonymous/ComfyUI/releases)和 ComfyUI-Manager。Registry 版本激活后，在 **Manager → Custom Nodes** 搜索 **Suno**，确认发布者是 **acedatacloud**、包名是 **Suno by Ace Data Cloud**，安装并重启。Registry 包 ID 是 `ace-suno`，源码仓库是 `AceDataCloud/SunoComfyUI`。
+打开 **Manager → Custom Nodes Manager**，搜索 **Ace Data Cloud**，选择 **Suno by Ace Data Cloud**，核对发布者 **acedatacloud** 和源码仓库 [`AceDataCloud/SunoComfyUI`](https://github.com/AceDataCloud/SunoComfyUI)，再点击 **Install**。在 **Select Version** 版本对话框明确选择已批准的 Registry 稳定版 **0.3.0**；普通对话框可能默认高亮 **nightly**，本教程不要直接接受该选项。保留依赖自动安装。出现 **Restart Required** 后重启 ComfyUI，并刷新浏览器。Registry ID 为 `ace-suno`。
 
-正式上架前，本地源码测试可运行：
+这条 Registry 稳定版安装路径已于 **2026-10-16 在原版 Linux CPU ComfyUI 0.41.0** 验证；该次安装验收没有提交生成或聊天请求。更新的宿主版本及每个收费动作仍需分别验证，模型可用性与价格以当前服务规则为准。
+
+如需本地源码测试，可运行：
 
 ```bash
 cd /path/to/ComfyUI/custom_nodes
@@ -25,7 +33,7 @@ python -m pip install -r requirements.txt
 
 ## 2. 配置有 Suno 权限的 Key
 
-1. 登录 [Ace Data Cloud 控制台](https://platform.acedata.cloud/console/applications)，打开已开通 Suno 的应用。使用已有 Key，或创建专用 Key。设置 API 路径限制时允许 `/suno/audios`、`/suno/lyrics` 和 `/suno/tasks`。
+1. 登录 [Ace Data Cloud 控制台](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=sunocomfyui_readme_zh_cn_api_key)，打开已开通 Suno 的应用。使用已有 Key，或创建专用 Key。设置 API 路径限制时允许 `/suno/audios`、`/suno/lyrics` 和 `/suno/tasks`。
 2. 生成前查看当前价格及 Credits 余额。短提示词不一定降低单次生成费用。
 3. 在 **ComfyUI 进程环境**中配置 Key，然后重启。终端安装示例：
 
@@ -66,7 +74,7 @@ Key 只放在私有 shell 或进程管理器中，不写入工作流 JSON、仓�
 
 ## 7. 账单与排障
 
-在 [Ace Data Cloud 控制台](https://platform.acedata.cloud/console/applications)按任务或 Trace ID 检查请求记录及 Credits 扣费。任务查询不应产生新的音乐生成。
+在 [Ace Data Cloud 控制台](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=sunocomfyui_readme_zh_cn_api_key)按任务或 Trace ID 检查请求记录及 Credits 扣费。任务查询不应产生新的音乐生成。
 
 | 现象 | 处理 |
 | --- | --- |
