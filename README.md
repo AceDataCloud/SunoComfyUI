@@ -16,9 +16,11 @@ The `AUDIO` output connects to ComfyUI's **Preview Audio** and **Save Audio** no
 
 ## 1. Install
 
-Use [ComfyUI's current stable release](https://github.com/comfyanonymous/ComfyUI/releases) with ComfyUI-Manager. When the Registry version is active, open **Manager → Custom Nodes**, search **Suno**, confirm publisher **acedatacloud** and package **Suno by Ace Data Cloud**, then install and restart. The Registry ID is `ace-suno`; the source repository is `AceDataCloud/SunoComfyUI`.
+Open **Manager → Custom Nodes Manager** and search **Ace Data Cloud**. Select **Suno by Ace Data Cloud**, confirm publisher **acedatacloud** and source repository [`AceDataCloud/SunoComfyUI`](https://github.com/AceDataCloud/SunoComfyUI), then click **Install**. In **Select Version**, explicitly select the approved Registry stable release **0.3.0**. The normal dialog may initially highlight **nightly**; do not accept it for this stable-release tutorial. Keep dependency installation enabled. After **Restart Required**, restart ComfyUI and refresh the browser. Registry ID: `ace-suno`.
 
-For local source testing before Registry publication:
+This Registry stable installation was verified on **2026-10-16 with original ComfyUI 0.41.0 on Linux CPU**. That test did not submit a generation or chat request. Newer host versions and each paid action require their own checks; model availability and price remain subject to the current service rules.
+
+For optional local source testing:
 
 ```bash
 cd /path/to/ComfyUI/custom_nodes
