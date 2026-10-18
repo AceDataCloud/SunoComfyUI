@@ -9,6 +9,8 @@ from __future__ import annotations
 import json
 import os
 
+from .dify_contracts import ENDPOINTS
+
 from .dify_client import AceDataSunoClient
 
 SERVICE = 'Suno'
@@ -290,6 +292,21 @@ def _credential() -> str:
     return token.strip()
 
 
+def _is_read_only_lookup(tool, parameters):
+    endpoint = ENDPOINTS[tool]
+    if endpoint.get('selector'):
+        action = parameters.get('action', endpoint.get('selector_default'))
+        selected = endpoint['selector'].get(action) if isinstance(action, str) else None
+        if not selected:
+            return False
+        endpoint = ENDPOINTS[selected]
+    values = {**endpoint.get('defaults', {}), **parameters, **endpoint.get('fixed', {})}
+    return bool(endpoint.get('operation') in {'task', 'batch'}
+                or endpoint['method'] == 'GET' or endpoint.get('read_only', False)
+                or ('action' in endpoint.get('properties', {})
+                    and values.get('action') in endpoint.get('query_actions', [])))
+
+
 class _ToolNode:
     RETURN_TYPES = ('STRING', 'STRING', 'STRING', 'STRING', 'STRING', 'STRING')
     RETURN_NAMES = ('status', 'task_id', 'media_urls_json', 'first_media_url', 'result_json', 'trace_id')
@@ -318,6 +335,31 @@ class _ToolNode:
         if spec['operation'] == 'batch':
             required['ids_json'] = ('STRING', {'multiline': True, 'default': ''})
         return {'required': required}
+
+    @classmethod
+    def IS_CHANGED(cls, parameters_json='{}', action=SENTINEL, **kwargs):
+        # Pure cache policy: never authenticate or make a request here.
+        endpoint = ENDPOINTS[cls.TOOL]
+        allowed_actions = endpoint.get('properties', {}).get('action', {}).get('enum', [])
+        always_query = (endpoint.get('operation') in {'task', 'batch'}
+                        or endpoint['method'] == 'GET' or endpoint.get('read_only', False)
+                        or (bool(allowed_actions) and set(allowed_actions).issubset(endpoint.get('query_actions', []))))
+        # Linked JSON/actions are unavailable while fingerprints are computed.
+        # Unknown mixed operations must stay cacheable to avoid paid replays.
+        if not always_query and (parameters_json is None
+                                 or (action is None and cls.SPEC.get('actions'))):
+            return False
+        try:
+            parameters = json.loads(parameters_json) if parameters_json is not None else {}
+        except (TypeError, ValueError):
+            return False
+        if not isinstance(parameters, dict):
+            return False
+        if action is not None and action != SENTINEL:
+            parameters['action'] = action
+        # Paid/destructive/unknown actions retain stable caching. Only declared
+        # read-only operations bypass stale outputs on an unchanged graph.
+        return float('nan') if _is_read_only_lookup(cls.TOOL, parameters) else False
 
     def run(self, parameters_json: str, model: str = SENTINEL, action: str = SENTINEL,
             task_id: str = '', wait_seconds: int = 0, ids_json: str = '', **fields):

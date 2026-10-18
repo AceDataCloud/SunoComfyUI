@@ -17,7 +17,7 @@ The `AUDIO` output connects to ComfyUI's **Preview Audio** and **Save Audio** no
 
 ## Current version and install source
 
-This source version is **0.3.1**. Check [GitHub Releases](https://github.com/AceDataCloud/SunoComfyUI/releases) for its versioned ZIP. The Registry section below retains the last verified **Active 0.3.0 on 2026-10-19**; that older ZIP does not contain this release's updated guide, examples or fixes. To use this version, install its GitHub Release ZIP, or select the exact **0.3.1** Registry release once it becomes Active. Do not substitute the initial nightly selection for a verified stable release.
+This source version is **0.3.2**. Check [GitHub Releases](https://github.com/AceDataCloud/SunoComfyUI/releases) for its versioned ZIP. The Registry section below retains the last verified **Active 0.3.0 on 2026-10-19**; that older ZIP does not contain this release's updated guide, examples or fixes. To use this version, install its GitHub Release ZIP, or select the exact **0.3.2** Registry release once it becomes Active. Do not substitute the initial nightly selection for a verified stable release.
 
 To install the GitHub ZIP, stop ComfyUI and back up any existing node directory. Extract the ZIP contents into `ComfyUI/custom_nodes/ace-suno/` without adding an extra nested directory, run `python -m pip install -r requirements.txt` there, then restart and refresh. Keep the API Token in the actual launch-process environment. A GitHub ZIP install is separate from a verified Registry/Manager stable installation.
 
@@ -130,3 +130,5 @@ python -m py_compile __init__.py client.py nodes.py
 ```
 
 For Registry publishing, `pyproject.toml` uses the existing ID `ace-suno`, version `0.3.0`, and publisher `acedatacloud`. Its 400×400 icon is a proportional resize of the [canonical Ace logo](https://cdn.acedata.cloud/assets/logo.png) to meet the Registry size limit.
+
+Task lookup nodes refresh the same task on every queued execution rather than reusing a cached pending result. Paid submissions retain stable caching when inputs are unchanged, so refreshing a query does not resubmit generation. Disable auto-queue/auto-run before importing or running these workflows, and explicitly submit once.

@@ -1,6 +1,6 @@
 [project]
 name = "ace-suno"
-version = "0.3.1"
+version = "0.3.2"
 description = "Suno music and lyrics generation, same-task lookup, and native audio preview through Ace Data Cloud"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"

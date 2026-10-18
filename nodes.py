@@ -8,6 +8,13 @@ from .client import (AUDIO_MODELS, LYRICS_MODELS, SunoError, download_audio,
                      generate_lyrics, retrieve, retrieve_lyrics_once, submit)
 
 
+
+class _FreshTaskLookup:
+    @classmethod
+    def IS_CHANGED(cls, **kwargs):
+        # Task state changes remotely even when this graph's inputs do not.
+        return float('nan')
+
 class AceSunoGenerate:
     @classmethod
     def INPUT_TYPES(cls):
@@ -30,7 +37,7 @@ class AceSunoGenerate:
                 "result": (task_id, trace_id)}
 
 
-class AceSunoRetrieve:
+class AceSunoRetrieve(_FreshTaskLookup):
     @classmethod
     def INPUT_TYPES(cls):
         return {"required": {
@@ -73,7 +80,7 @@ class AceSunoGenerateLyrics:
                 "result": (status, task_id, lyrics_json, trace_id)}
 
 
-class AceSunoRetrieveLyrics:
+class AceSunoRetrieveLyrics(_FreshTaskLookup):
     @classmethod
     def INPUT_TYPES(cls):
         return {"required": {"task_id": ("STRING", {"default": ""})}}
