@@ -14,6 +14,13 @@ Generate Suno music with your Ace Data Cloud account, retrieve the **same task I
 
 The `AUDIO` output connects to ComfyUI's **Preview Audio** and **Save Audio** nodes. The starter workflow uses the first track if a task returns multiple tracks. The music node offers all ten music model IDs in the current [Suno Dify plugin](https://github.com/AceDataCloud/SunoDify); the lyrics node offers its other two model IDs. Nineteen additional schema-backed nodes expose all Dify tool definitions and their actions. Their `media_urls_json` output preserves every returned media link. Model availability and price can vary.
 
+
+## Current version and install source
+
+This source version is **0.3.1**. Check [GitHub Releases](https://github.com/AceDataCloud/SunoComfyUI/releases) for its versioned ZIP. The Registry section below retains the last verified **Active 0.3.0 on 2026-10-19**; that older ZIP does not contain this release's updated guide, examples or fixes. To use this version, install its GitHub Release ZIP, or select the exact **0.3.1** Registry release once it becomes Active. Do not substitute the initial nightly selection for a verified stable release.
+
+To install the GitHub ZIP, stop ComfyUI and back up any existing node directory. Extract the ZIP contents into `ComfyUI/custom_nodes/ace-suno/` without adding an extra nested directory, run `python -m pip install -r requirements.txt` there, then restart and refresh. Keep the API Token in the actual launch-process environment. A GitHub ZIP install is separate from a verified Registry/Manager stable installation.
+
 ## 1. Install
 
 Open the official [Suno by Ace Data Cloud Registry page](https://registry.comfy.org/nodes/ace-suno), or open **Manager → Custom Nodes Manager** and search **Suno**. Use **Ace Data Cloud** as a fallback to find this publisher’s packages. Select **Suno by Ace Data Cloud**, confirm publisher **acedatacloud** and source repository [`AceDataCloud/SunoComfyUI`](https://github.com/AceDataCloud/SunoComfyUI), then click **Install**. In **Select Version**, explicitly select the approved Registry stable release **0.3.0**. The normal dialog may initially highlight **nightly**; do not accept it for this stable-release tutorial. Keep dependency installation enabled. After **Restart Required**, restart ComfyUI and refresh the browser. Registry ID: `ace-suno`.
