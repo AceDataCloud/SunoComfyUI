@@ -9,7 +9,7 @@
 
 ## 当前版本与安装来源
 
-本源码版本为 **0.3.1**，版本 ZIP 见 [GitHub Releases](https://github.com/AceDataCloud/SunoComfyUI/releases)。下文 Registry 安装段保留 **2026-10-19 已核 Active 的 0.3.0**；该旧 ZIP 尚不包含本版更新的图文、示例或修复。需要本版时，使用对应 GitHub Release ZIP，或等 Registry 中准确的 **0.3.1** 变为 Active 后再手选该版本；不要用默认 nightly 代替已核 stable。
+本源码版本为 **0.3.2**，版本 ZIP 见 [GitHub Releases](https://github.com/AceDataCloud/SunoComfyUI/releases)。下文 Registry 安装段保留 **2026-10-19 已核 Active 的 0.3.0**；该旧 ZIP 尚不包含本版更新的图文、示例或修复。需要本版时，使用对应 GitHub Release ZIP，或等 Registry 中准确的 **0.3.2** 变为 Active 后再手选该版本；不要用默认 nightly 代替已核 stable。
 
 从 GitHub ZIP 安装：停止 ComfyUI，先备份已有同名节点目录，把 ZIP 内文件解压到 `ComfyUI/custom_nodes/ace-suno/`（不要多嵌套一层目录），在该目录运行 `python -m pip install -r requirements.txt`，然后重启并刷新。API Token 仍只配在实际启动进程环境中。GitHub ZIP 安装与 Registry/Manager 正式稳定版安装是不同路径。
 
@@ -109,3 +109,5 @@ Key 只放在私有 shell 或进程管理器中，不写入工作流 JSON、仓�
 | 音频下载失败 | 确认任务成功且媒体链接有效；重新查任务，不要重新生成。 |
 
 插件把提示词发往 `api.acedata.cloud`，从 Ace CDN 下载完成的音频。Key 只从本机进程环境读取，不保存在工作流中。只提交有权处理的内容。详见[隐私说明](PRIVACY.md)。
+
+查询节点每次队列执行都会重新读取同一任务，不复用旧pending结果；收费提交在输入不变时仍保留缓存，避免查询时重发收费生成。导入或运行工作流前先关闭自动队列/自动运行，提交图只明确运行一次。
