@@ -6,6 +6,13 @@
 
 五个引导节点包括 **Suno Submit Music**（收费生成一次并显示任务 ID）、**Suno Retrieve Task**（只查询已有任务）、**Suno Load Audio**（解码成 ComfyUI `AUDIO`），以及歌词提交和歌词任务查询。音乐节点覆盖当前 Dify Suno 插件的 10 个音乐 model ID，歌词节点覆盖 `default`、`remi-v1`。另有 19 个合同驱动节点逐项覆盖 Dify 正式工具定义与 action。引导工作流使用返回的第一首音频；高级节点的 `media_urls_json` 保留全部链接。
 
+
+## 当前版本与安装来源
+
+本源码版本为 **0.3.1**，版本 ZIP 见 [GitHub Releases](https://github.com/AceDataCloud/SunoComfyUI/releases)。下文 Registry 安装段保留 **2026-10-19 已核 Active 的 0.3.0**；该旧 ZIP 尚不包含本版更新的图文、示例或修复。需要本版时，使用对应 GitHub Release ZIP，或等 Registry 中准确的 **0.3.1** 变为 Active 后再手选该版本；不要用默认 nightly 代替已核 stable。
+
+从 GitHub ZIP 安装：停止 ComfyUI，先备份已有同名节点目录，把 ZIP 内文件解压到 `ComfyUI/custom_nodes/ace-suno/`（不要多嵌套一层目录），在该目录运行 `python -m pip install -r requirements.txt`，然后重启并刷新。API Token 仍只配在实际启动进程环境中。GitHub ZIP 安装与 Registry/Manager 正式稳定版安装是不同路径。
+
 ## 1. 安装
 
 打开官方 [Suno by Ace Data Cloud Registry 页面](https://registry.comfy.org/nodes/ace-suno)，或在 **Manager → Custom Nodes Manager** 搜索 **Suno**；找不到时再搜 **Ace Data Cloud**。选择 **Suno by Ace Data Cloud**，核对发布者 **acedatacloud** 和源码仓库 [`AceDataCloud/SunoComfyUI`](https://github.com/AceDataCloud/SunoComfyUI)，再点击 **Install**。在 **Select Version** 版本对话框明确选择已批准的 Registry 稳定版 **0.3.0**；普通对话框可能默认高亮 **nightly**，本教程不要直接接受该选项。保留依赖自动安装。出现 **Restart Required** 后重启 ComfyUI，并刷新浏览器。Registry ID 为 `ace-suno`。
