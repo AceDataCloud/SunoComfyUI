@@ -1,7 +1,7 @@
 [project]
 name = "ace-suno"
 version = "0.3.0"
-description = "Suno Dify tool parity, music generation, task lookup, and audio preview through Ace Data Cloud"
+description = "Suno music and lyrics generation, same-task lookup, and native audio preview through Ace Data Cloud"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = ["requests>=2.31,<3", "jsonschema>=4,<5"]
