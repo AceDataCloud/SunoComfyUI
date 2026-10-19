@@ -25,6 +25,14 @@
 
 这条 Registry 稳定版安装路径已于 **2026-10-16 在原版 Linux CPU ComfyUI 0.41.0** 验证；该次安装验收没有提交生成或聊天请求。更新的宿主版本及每个收费动作仍需分别验证，模型可用性与价格以当前服务规则为准。
 
+## 官方Manager可选legacy条目
+
+[ComfyUI-Manager #3365](https://github.com/Comfy-Org/ComfyUI-Manager/pull/3365)已于 **2026-10-19** 合并。含[该官方条目](https://github.com/Comfy-Org/ComfyUI-Manager/blob/a74929c65b49d7d7d81b9a6f140de878a818b893/custom-node-list.json#L62318)的Manager版本可在文档所述Local DB列出 **Suno by Ace Data Cloud**。核对精确仓库，验证过的稳定路线仍手选Registry **0.3.0**。条目里的`git-clone`/`SunoComfyUI`来源句柄与显式稳定版`ace-suno@0.3.0`不同，nightly/Git不等于该Registry包。
+
+**2026-10-20 Asia/Shanghai** 已在原版Linux ComfyUI **0.41.0**、未修改官方Manager `a74929c6`验证Local DB命令行发现、明确安装`ace-suno@0.3.0`且保留依赖、启用回读和24节点宿主加载，无Key或上游调用。这是CLI/宿主证据，不是新UI实拍、付费成品、GitHub `0.3.2`的普通安装、默认Partner或精选。现有Registry路线独立于本可选legacy条目。
+
+源码`pyproject.toml`当前版本 **0.3.2**；已发布Active Registry仍是 **0.3.0**（2026-10-20读回）。源码声明不代表Registry新版已激活，不覆盖上传旧版本。
+
 ## 注册并获取 API Token
 
 ### 复制或创建自己的 API Token

@@ -46,6 +46,12 @@ Restart ComfyUI and search the node picker for **Suno**. Confirm the five guided
 
 ![Suno nodes found in the local ComfyUI node picker](docs/images/00-local-node-search.png)
 
+### Official Manager legacy entry
+
+The optional legacy index entry was [accepted in ComfyUI-Manager #3365](https://github.com/Comfy-Org/ComfyUI-Manager/pull/3365) on **2026-10-19**. Updated official Manager versions containing [this entry](https://github.com/Comfy-Org/ComfyUI-Manager/blob/a74929c65b49d7d7d81b9a6f140de878a818b893/custom-node-list.json#L62318) can list **Suno by Ace Data Cloud** in the documented Local DB. Confirm the exact repository and select Registry stable **0.3.0** for the verified stable path. The entry's `git-clone` source/`SunoComfyUI` handle is distinct from the explicit stable `ace-suno@0.3.0` selection; choosing nightly/Git does not install that Registry artifact.
+
+On **2026-10-20 Asia/Shanghai**, unmodified official Manager `a74929c6` with original Linux ComfyUI **0.41.0** passed Local DB CLI discovery, explicit `ace-suno@0.3.0` installation with dependencies, enabled readback and 24-node host loading without a Key or upstream call. This is CLI/host evidence, not a new Manager UI screenshot, a paid result, the GitHub `0.3.2` ZIP's ordinary installation, default Partner inclusion or featured placement. The Registry route already worked independently of this optional legacy entry.
+
 ## 2. Get a key with Suno access
 
 ### Copy or create your own API Token
@@ -129,6 +135,6 @@ python -m unittest discover -s tests -v
 python -m py_compile __init__.py client.py nodes.py
 ```
 
-For Registry publishing, `pyproject.toml` uses the existing ID `ace-suno`, version `0.3.0`, and publisher `acedatacloud`. Its 400×400 icon is a proportional resize of the [canonical Ace logo](https://cdn.acedata.cloud/assets/logo.png) to meet the Registry size limit.
+`pyproject.toml` declares source version `0.3.2`, existing ID `ace-suno`, and publisher `acedatacloud`. The separately published Active Registry version is still `0.3.0` as last checked on 2026-10-20; do not upload over that version or interpret the source declaration as Registry activation. Its 400×400 icon is a proportional resize of the [canonical Ace logo](https://cdn.acedata.cloud/assets/logo.png) to meet the Registry size limit.
 
 Task lookup nodes refresh the same task on every queued execution rather than reusing a cached pending result. Paid submissions retain stable caching when inputs are unchanged, so refreshing a query does not resubmit generation. Disable auto-queue/auto-run before importing or running these workflows, and explicitly submit once.
