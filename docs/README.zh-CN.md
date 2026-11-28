@@ -9,13 +9,13 @@
 
 ## 当前版本与安装来源
 
-本源码版本为 **0.3.2**，版本 ZIP 见 [GitHub Releases](https://github.com/AceDataCloud/SunoComfyUI/releases)。下文 Registry 安装段保留 **2026-10-19 已核 Active 的 0.3.0**；该旧 ZIP 尚不包含本版更新的图文、示例或修复。需要本版时，使用对应 GitHub Release ZIP，或等 Registry 中准确的 **0.3.2** 变为 Active 后再手选该版本；不要用默认 nightly 代替已核 stable。
+本源码版本为 **0.3.3**，版本 ZIP 见 [GitHub Releases](https://github.com/AceDataCloud/SunoComfyUI/releases)。下文 Registry 安装段保留 **2026-10-19 已核 Active 的 0.3.0**；该旧 ZIP 尚不包含本版更新的图文、示例或修复。需要本版时，使用对应 GitHub Release ZIP，或等 Registry 中准确的 **0.3.3** 变为 Active 后再手选该版本；不要用默认 nightly 代替已核 stable。
 
 从 GitHub ZIP 安装：停止 ComfyUI，先备份已有同名节点目录，把 ZIP 内文件解压到 `ComfyUI/custom_nodes/ace-suno/`（不要多嵌套一层目录），在该目录运行 `python -m pip install -r requirements.txt`，然后重启并刷新。API Token 仍只配在实际启动进程环境中。GitHub ZIP 安装与 Registry/Manager 正式稳定版安装是不同路径。
 
 ## 1. 安装
 
-打开官方 [Suno by Ace Data Cloud Registry 页面](https://registry.comfy.org/nodes/ace-suno)，或在 **Manager → Custom Nodes Manager** 搜索 **Suno**；找不到时再搜 **Ace Data Cloud**。选择 **Suno by Ace Data Cloud**，核对发布者 **acedatacloud** 和源码仓库 [`AceDataCloud/SunoComfyUI`](https://github.com/AceDataCloud/SunoComfyUI)，再点击 **Install**。在 **Select Version** 版本对话框明确选择已批准的 Registry 稳定版 **0.3.0**；普通对话框可能默认高亮 **nightly**，本教程不要直接接受该选项。保留依赖自动安装。出现 **Restart Required** 后重启 ComfyUI，并刷新浏览器。Registry ID 为 `ace-suno`。
+打开官方 [Suno Registry 页面](https://registry.comfy.org/nodes/ace-suno)，或在 **Manager → Custom Nodes Manager** 搜索 **Suno**；找不到时再搜 **Ace Data Cloud**。选择 **Suno**，核对发布者 **acedatacloud** 和源码仓库 [`AceDataCloud/SunoComfyUI`](https://github.com/AceDataCloud/SunoComfyUI)，再点击 **Install**。在 **Select Version** 版本对话框明确选择已批准的 Registry 稳定版 **0.3.0**；普通对话框可能默认高亮 **nightly**，本教程不要直接接受该选项。保留依赖自动安装。出现 **Restart Required** 后重启 ComfyUI，并刷新浏览器。Registry ID 为 `ace-suno`。
 
 ![真实 Manager 列表中的本服务节点包](images/manager-discovery.png)
 
@@ -27,7 +27,7 @@
 
 ## 官方Manager可选legacy条目
 
-[ComfyUI-Manager #3365](https://github.com/Comfy-Org/ComfyUI-Manager/pull/3365)已于 **2026-10-19** 合并。含[该官方条目](https://github.com/Comfy-Org/ComfyUI-Manager/blob/a74929c65b49d7d7d81b9a6f140de878a818b893/custom-node-list.json#L62318)的Manager版本可在文档所述Local DB列出 **Suno by Ace Data Cloud**。核对精确仓库，验证过的稳定路线仍手选Registry **0.3.0**。条目里的`git-clone`/`SunoComfyUI`来源句柄与显式稳定版`ace-suno@0.3.0`不同，nightly/Git不等于该Registry包。
+[ComfyUI-Manager #3365](https://github.com/Comfy-Org/ComfyUI-Manager/pull/3365)已于 **2026-10-19** 合并。含[该官方条目](https://github.com/Comfy-Org/ComfyUI-Manager/blob/a74929c65b49d7d7d81b9a6f140de878a818b893/custom-node-list.json#L62318)的Manager版本可在文档所述Local DB列出 **Suno**。核对精确仓库，验证过的稳定路线仍手选Registry **0.3.0**。条目里的`git-clone`/`SunoComfyUI`来源句柄与显式稳定版`ace-suno@0.3.0`不同，nightly/Git不等于该Registry包。
 
 **2026-10-20 Asia/Shanghai** 已在原版Linux ComfyUI **0.41.0**、未修改官方Manager `a74929c6`验证Local DB命令行发现、明确安装`ace-suno@0.3.0`且保留依赖、启用回读和24节点宿主加载，无Key或上游调用。这是CLI/宿主证据，不是新UI实拍、付费成品、GitHub `0.3.2`的普通安装、默认Partner或精选。现有Registry路线独立于本可选legacy条目。
 
