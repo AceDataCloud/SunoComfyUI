@@ -1,6 +1,6 @@
 [project]
 name = "ace-suno"
-version = "0.3.2"
+version = "0.3.3"
 description = "Suno music and lyrics generation, same-task lookup, and native audio preview through Ace Data Cloud"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
@@ -14,7 +14,7 @@ Documentation = "https://github.com/AceDataCloud/SunoComfyUI#readme"
 
 [tool.comfy]
 PublisherId = "acedatacloud"
-DisplayName = "Suno by Ace Data Cloud"
+DisplayName = "Suno"
 Icon = "https://raw.githubusercontent.com/AceDataCloud/SunoComfyUI/main/assets/logo-400.png"
 
 [tool.pytest.ini_options]
